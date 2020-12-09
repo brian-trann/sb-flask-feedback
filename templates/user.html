@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Flask Feedback{% endblock %}
+
+{% block content %}
+
+
+<h1>{{user.username}}</h1>
+{% for msg in get_flashed_messages()%}
+<p class="alert alert-info">
+  {{msg}}
+</p>
+{% endfor %}
+<p>Full name: {{user.full_name}}</p>
+<p>User email: {{user.email}}</p>
+<form class="mb-3" action="/users/{{user.username}}/delete" method="POST">
+    <button class="btn button btn-danger">Delete User</button>
+</form>
+<hr>
+
+{% if user.feedback %}
+    <h3>Feedback</h3>
+    {% for feedback in user.feedback %}
+    <h5>
+        <form>
+            {{feedback.title}} 
+            <a class="btn btn-sm button btn-secondary" href="/feedback/{{feedback.id}}/update">Update</a>
+            <button formaction="/feedback/{{feedback.id}}/delete" formmethod="POST" class="btn btn-sm button btn-danger">X</button>
+        </form>
+    </h5>
+    <p class="lead">{{feedback.content}}</p>
+    <hr>
+    {% endfor %}
+    
+    {% else %}
+    <h4 class="my-3">This user has no posts yet</h4>
+{% endif %}
+<a href="/users/{{user.username}}/feedback/add" class="btn button btn-info">Add Feedback</a>
+<a href="/logout" class="btn button btn-outline-secondary">Logout</a>
+
+
+    
+{% endblock %}
